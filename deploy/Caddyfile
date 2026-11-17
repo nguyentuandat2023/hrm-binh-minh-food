@@ -1,0 +1,13 @@
+# Reverse proxy HTTPS – Caddy tự xin và gia hạn chứng chỉ Let's Encrypt cho tên miền trong biến DOMAIN.
+# Caddy ghi đè X-Forwarded-For bằng IP thật của người dùng (không tin header do client tự gửi).
+{$DOMAIN} {
+	encode zstd gzip
+	request_body {
+		max_size 12MB
+	}
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+	reverse_proxy app:3000
+}

@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #f5f7f8;
+  --foreground: #0f1f1d;
+  --card: #ffffff;
+  --card-foreground: #0f1f1d;
+  --muted: #eef2f2;
+  --muted-foreground: #5b6b6a;
+  --border: #dde4e4;
+  --input: #cfd8d8;
+  --primary: #0f766e;
+  --primary-hover: #0d5f59;
+  --primary-foreground: #ffffff;
+  --primary-soft: #e6f4f2;
+  --ring: #14b8a6;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --success: #059669;
+  --sidebar: #0c2321;
+  --sidebar-foreground: #c9dedb;
+  --sidebar-active: #134e48;
+  /* Bảng màu biểu đồ – đã kiểm tra bằng validate_palette (light, nền #ffffff): đạt cả 5 tiêu chí */
+  --chart-1: #0d9488;
+  --chart-2: #2563eb;
+  --chart-3: #d97706;
+  --chart-4: #db2777;
+  --chart-5: #7c3aed;
+  --chart-6: #64748b; /* "Khác" – trung tính */
+  --chart-grid: #e7ecec;
+  color-scheme: light;
+}
+
+.dark {
+  --background: #0b1312;
+  --foreground: #e3ecea;
+  --card: #111c1b;
+  --card-foreground: #e3ecea;
+  --muted: #182625;
+  --muted-foreground: #92a6a3;
+  --border: #233533;
+  --input: #2e4441;
+  --primary: #2dd4bf;
+  --primary-hover: #5eead4;
+  --primary-foreground: #04201d;
+  --primary-soft: #12332f;
+  --ring: #2dd4bf;
+  --sidebar: #08100f;
+  --sidebar-foreground: #a9c2be;
+  --sidebar-active: #143b37;
+  /* Dark: bậc màu riêng, đã kiểm tra trên nền card #111c1b */
+  --chart-1: #0d9488;
+  --chart-2: #3b82f6;
+  --chart-3: #d97706;
+  --chart-4: #ec4899;
+  --chart-5: #8b5cf6;
+  --chart-6: #94a3b8;
+  --chart-grid: #1f2f2d;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-ring: var(--ring);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-active: var(--sidebar-active);
+  --font-sans: "Segoe UI", "Be Vietnam Pro", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  border-color: var(--border);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .print-area {
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
