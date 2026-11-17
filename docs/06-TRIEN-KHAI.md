@@ -76,6 +76,17 @@ Dùng `X-Forwarded-For $remote_addr` (ghi đè, không nối thêm) để IP tro
 ### Không dùng Docker
 Node 20+ và PostgreSQL 15+: `npm ci && npx prisma migrate deploy && npm run db:seed && npm run build`, chép `.next/static` vào `.next/standalone/.next/static`, chạy `node --env-file=.env .next/standalone/server.js` bằng systemd/PM2 (đặt `STORAGE_DIR`, `BACKUP_DIR` là đường dẫn tuyệt đối vì server standalone đổi thư mục làm việc).
 
+### Triển khai trên Railway (tự cập nhật từ GitHub)
+Cấu hình sẵn: `railway.json` + `Dockerfile.railway`. Mỗi lần khởi động: `prisma migrate deploy` → `prisma/seed.ts` (dữ liệu nền; tạo Super Admin từ `INITIAL_ADMIN_EMAIL/PASSWORD` nếu chưa có) → chạy ứng dụng.
+1. `node scripts/railway-env.mjs --email <email quản trị> --short "<tên viết tắt>"` → tạo `.env.railway` (không commit; sao lưu `DATA_ENCRYPTION_KEY`).
+2. railway.com → đăng nhập bằng GitHub → **New Project → Deploy from GitHub repo** → chọn kho.
+3. Trong project: **+ Create → Database → PostgreSQL** (tên dịch vụ để mặc định `Postgres`).
+4. Dịch vụ ứng dụng → **Variables → Raw Editor** → dán nội dung `.env.railway` → Update.
+5. Dịch vụ ứng dụng → **Settings → Volumes** (hoặc chuột phải → Attach volume) → mount path `/app/storage` (lưu file tải lên).
+6. **Settings → Networking → Generate Domain** (cổng 3000) → mở link, đăng nhập.
+7. Sau khi đăng nhập được: xoá biến `INITIAL_ADMIN_PASSWORD`, đổi mật khẩu nếu cần, bật xác thực hai lớp.
+Lưu ý: chạy 1 bản (replica) duy nhất vì bộ lập lịch và giới hạn đăng nhập nằm trong bộ nhớ.
+
 ## 4. Danh sách kiểm tra trước khi bàn giao Production
 1. `.env` đủ giá trị, `COOKIE_SECURE=true`, `APP_URL` đúng tên miền HTTPS.
 2. Không chạy `db:seed:demo` (script tự từ chối khi `NODE_ENV=production`).
