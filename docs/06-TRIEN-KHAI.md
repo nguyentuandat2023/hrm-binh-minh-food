@@ -52,7 +52,7 @@ docker compose logs -f app
 ```
 - Ứng dụng lắng nghe `127.0.0.1:3000`; DB không mở cổng ra ngoài.
 - Image chạy bằng user `hrm` (không phải root), có `HEALTHCHECK` gọi `/api/health`.
-- **Lưu ý:** Dockerfile/compose chưa được build thử trên máy phát triển (Docker daemon không chạy); bản build standalone tương đương đã được kiểm thử 133/133 ca.
+- **Lưu ý:** Dockerfile/compose chưa được build thử trên máy phát triển (Docker daemon không chạy); bản build standalone tương đương đã được kiểm thử 134/134 ca.
 
 ### Reverse proxy HTTPS (ví dụ Nginx)
 ```nginx

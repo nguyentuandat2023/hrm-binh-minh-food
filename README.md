@@ -25,7 +25,7 @@ Cài đặt **không có dữ liệu giả** (dùng thật): thay `db:seed:demo`
 ## Kiểm thử
 
 ```bash
-npm test               # 83 kiểm thử đơn vị (tính công, ca qua đêm, phép, lương, phân quyền, bảo mật)
+npm test               # 87 kiểm thử đơn vị (tính công, ca qua đêm, phép, lương, phân quyền, bảo mật)
 npm run test:smoke     # 134 kiểm thử end-to-end qua HTTP (cần server đang chạy + dữ liệu demo)
 npm run typecheck
 ```

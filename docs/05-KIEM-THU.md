@@ -13,7 +13,7 @@ Bộ end-to-end chạy lặp lại được trên cùng một DB (tự dọn d�
 |---|---|
 | TypeScript `tsc --noEmit` | Không lỗi |
 | `next build` (production, standalone) | Thành công |
-| Kiểm thử đơn vị (6 file) | **83/83 đạt** |
+| Kiểm thử đơn vị (7 file) | **87/87 đạt** |
 | End-to-end trên server dev | **134/134 đạt** |
 | End-to-end trên bản build production (standalone) | **134/134 đạt** |
 | Kiểm tra giao diện (Edge headless, 1440×900 & 390×844, light/dark) | Không tràn ngang; lỗi hiển thị phát hiện đã sửa (xem dưới) |
@@ -56,6 +56,7 @@ Bộ end-to-end chạy lặp lại được trên cùng một DB (tự dọn d�
 | 9 | Thẻ thống kê cắt chữ/tràn số ở 1440px; ô tháng trống | Giao diện | Đã sửa |
 | 10 | Nút “Vào ca” còn bấm được sau khi đã chấm đủ | Thấp | Đã sửa |
 | 12 | Giới hạn đăng nhập đếm cả lần đúng và gộp mọi người chung một hạn mức khi không có reverse proxy → sau ~30 lần đăng nhập trong 10 phút, **mọi người** bị chặn (“Quá nhiều lần thử”). Phát hiện khi người dùng thử nghiệm không đăng nhập được | Cao | Đã sửa – chỉ đếm lần sai, theo IP khi biết IP; thêm kiểm thử 35 lần đăng nhập liên tiếp |
+| 13 | Trên Railway, `APP_URL="https://${{RAILWAY_PUBLIC_DOMAIN}}"` thành `"https://"` khi chưa cấp tên miền → `new URL()` ném lỗi → mọi thao tác POST (kể cả đăng nhập) trả 500; link QR thành `https:///checkin` | Cao | Đã sửa – đọc APP_URL an toàn (`src/lib/app-url.ts`), QR dùng Host do proxy chuyển tới; thêm kiểm thử đơn vị; build lại không có `.env` (như Railway) thành công |
 | 11 | Trang bị chặn quyền trả HTTP 200 kèm chỉ thị chuyển hướng (do streaming/Suspense) thay vì 307 | Thông tin | Chấp nhận – đã kiểm chứng không lộ dữ liệu; API vẫn trả 403 |
 
 ## Chưa kiểm thử trên máy này

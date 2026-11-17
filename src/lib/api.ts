@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { ZodError, type ZodTypeAny, type z } from "zod";
 import { getSessionState, mfaRequiredButMissing } from "./auth";
 import { HttpError } from "./errors";
+import { appOrigin } from "./app-url";
 import type { AuthCtx } from "./rbac";
 
 type Params = Record<string, string>;
@@ -21,7 +22,8 @@ export function checkOrigin(req: NextRequest): boolean {
   const origin = req.headers.get("origin");
   const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
   const allowed = new Set<string>();
-  if (process.env.APP_URL) allowed.add(new URL(process.env.APP_URL).origin);
+  const configured = appOrigin();
+  if (configured) allowed.add(configured);
   if (host) {
     allowed.add(`http://${host}`);
     allowed.add(`https://${host}`);
