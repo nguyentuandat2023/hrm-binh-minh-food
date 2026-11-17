@@ -292,8 +292,14 @@ export async function runModuleCases({ admin }) {
     expect(b.data.result.contracts === 0 && b.data.result.birthdays === 0, `lần 2 vẫn tạo thông báo: ${JSON.stringify(b.data.result)}`);
   });
   await test("HR nhận thông báo hợp đồng sắp hết hạn", async () => {
-    const r = await hr.get("/api/notifications?size=50");
-    expect(r.data.items.some((n) => n.type === "CONTRACT_EXPIRING"), "không có thông báo hợp đồng");
+    // Thông báo chỉ tạo 1 lần (chống trùng) nên sau nhiều lượt chạy có thể nằm sau các trang đầu → duyệt hết các trang
+    let found = false;
+    for (let page = 1; !found && page <= 20; page++) {
+      const r = await hr.get(`/api/notifications?size=100&page=${page}`);
+      found = r.data.items.some((n) => n.type === "CONTRACT_EXPIRING");
+      if (r.data.items.length < 100) break;
+    }
+    expect(found, "không có thông báo hợp đồng");
   });
   await test("Cron endpoint từ chối khi sai secret", async () => expectStatus(await new Client("x").post("/api/cron/daily", {}, { "x-cron-secret": "sai" }), 401));
 

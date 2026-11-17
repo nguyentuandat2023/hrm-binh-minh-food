@@ -77,7 +77,8 @@ Dùng `X-Forwarded-For $remote_addr` (ghi đè, không nối thêm) để IP tro
 Node 20+ và PostgreSQL 15+: `npm ci && npx prisma migrate deploy && npm run db:seed && npm run build`, chép `.next/static` vào `.next/standalone/.next/static`, chạy `node --env-file=.env .next/standalone/server.js` bằng systemd/PM2 (đặt `STORAGE_DIR`, `BACKUP_DIR` là đường dẫn tuyệt đối vì server standalone đổi thư mục làm việc).
 
 ### Triển khai trên Railway (tự cập nhật từ GitHub)
-Cấu hình sẵn: `railway.json` + `Dockerfile.railway`. Mỗi lần khởi động: `prisma migrate deploy` → `prisma/seed.ts` (dữ liệu nền; tạo Super Admin từ `INITIAL_ADMIN_EMAIL/PASSWORD` nếu chưa có) → chạy ứng dụng.
+Cấu hình sẵn: `railway.json` + `Dockerfile.railway`. Mỗi lần khởi động, `scripts/railway-start.mjs`: kiểm tra biến môi trường (tự lấy chuỗi kết nối từ `DATABASE_PRIVATE_URL`/`DATABASE_PUBLIC_URL`/`PG*` nếu `DATABASE_URL` trống) → chờ DB tối đa `DB_WAIT_SECONDS` (mặc định 90 giây) → `prisma migrate deploy` → `prisma/seed.ts` (dữ liệu nền; tạo Super Admin từ `INITIAL_ADMIN_EMAIL/PASSWORD` nếu chưa có) → kiểm tra đã có Super Admin → chạy ứng dụng.
+**Cấu hình sai:** không khởi động lại liên tục mà mở trang hướng dẫn tiếng Việt (HTTP 503) trên chính tên miền, liệt kê mục cần sửa (chỉ tên biến, không lộ giá trị); nhật ký Deploy Logs ghi cùng nội dung với tiền tố `[khởi động]`. Healthcheck Railway dùng `/api/health/live` (không chạm DB) để trang hướng dẫn hiển thị được; `/api/health` vẫn kiểm tra DB.
 1. `node scripts/railway-env.mjs --email <email quản trị> --short "<tên viết tắt>"` → tạo `.env.railway` (không commit; sao lưu `DATA_ENCRYPTION_KEY`).
 2. railway.com → đăng nhập bằng GitHub → **New Project → Deploy from GitHub repo** → chọn kho.
 3. Trong project: **+ Create → Database → PostgreSQL** (tên dịch vụ để mặc định `Postgres`).

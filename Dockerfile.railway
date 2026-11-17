@@ -11,5 +11,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npx prisma generate && npx next build && cp -r .next/static .next/standalone/.next/static && mkdir -p /app/storage
 ENV NODE_ENV=production HOSTNAME=0.0.0.0 STORAGE_DIR=/app/storage
 EXPOSE 3000
-# 1) áp dụng migration  2) dữ liệu nền + tài khoản quản trị đầu tiên (nếu có biến INITIAL_ADMIN_*)  3) chạy ứng dụng
-CMD ["sh", "-c", "npx prisma migrate deploy && npx tsx prisma/seed.ts && node .next/standalone/server.js"]
+# scripts/railway-start.mjs: kiểm tra cấu hình → chờ DB → migrate → dữ liệu nền + quản trị đầu tiên → chạy ứng dụng.
+# Cấu hình sai thì mở trang hướng dẫn tiếng Việt thay vì khởi động lại liên tục.
+CMD ["node", "scripts/railway-start.mjs"]
